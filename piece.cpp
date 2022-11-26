@@ -135,13 +135,15 @@ int Rook_move(Piece(*board)[8], Piece* catchPiece, int turn, char name, int* win
 		case SUBMIT:
 			Piece catchPiece2 = board[y][x];
 			int whatname = catchPiece2.name;
-			if ((y == catchPiece2.pos[0]) && (x == catchPiece2.pos[1]))				// 제자리를 선택했다면
+			if ((y == catchPiece->pos[0]) && (x == catchPiece->pos[1]))				// 제자리를 선택했다면
 			{
+				printf("safasdfasfsdfsadsd");
 				return 0;												// 움직이지 않겠다는 의미로 받아들이고, 0 리턴.(= 움직임 구현 실패했다)
 			}
-			else if (((y == catchPiece2.pos[0]) || (x == catchPiece2.pos[1])) && (catchPiece2.exist != turn))	//선택한 곳이 세로줄, 가로줄 상에 존재하고 같은종류의 말이 아닐 경우
+			else if (((y == catchPiece->pos[0]) || (x == catchPiece->pos[1])) && (catchPiece2.exist != turn))	//선택한 곳이 세로줄, 가로줄 상에 존재하고 같은종류의 말이 아닐 경우
 			{
 				int success = 0;
+
 				recurse_Rook(board, *catchPiece, &catchPiece2, catchPiece2, &success, name, whatturn, Gibo);
 				if (success == 1)
 				{
@@ -853,18 +855,18 @@ int Pawn_move(Piece(*board)[8], Piece* catchPiece, int turn, int* win, int whatt
 
 						board[y1][x1] = { '-', {y1, x1}, 0 };									// 처음 위치 구조체 값들을 전부 초기화.
 						gotoxy(x1, y1);
-						printf("%c", catchPiece->name);
+						printf("-");
 
 						board[y2 + 1][x2] = { '-', {y2 + 1, x2}, 0 };									// 처음 위치 구조체 값들을 전부 초기화.
 						gotoxy(x2, y2 + 1);
-						printf("%c", catchPiece->name);
+						printf("-");
 
 						printGibofor_txtf(Gibo, whatturn, 'A', 'P', x1, y1, x2, y2, ' ');
 						printGibofor_console(whatturn, 'P', x1, y1, x2, y2, ' ');
 
 						if (catchPiece2.pos[0] == 0)											// 프로모션
 							promotion(board, catchPiece2, Gibo, whatturn);
-
+						return 1;
 					}
 
 
@@ -963,7 +965,7 @@ int Pawn_move(Piece(*board)[8], Piece* catchPiece, int turn, int* win, int whatt
 
 						printGibofor_txtf(Gibo, whatturn, 'A', 'P', x1, y1, x2, y2, ' ');
 						printGibofor_console(whatturn, 'P', x1, y1, x2, y2, ' ');
-
+						return 1;
 					}
 
 					if (board[y2][x2].exist == 1)
@@ -1018,4 +1020,6 @@ void printGibofor_console(int whatturn, char moved_thing, int x1, int y1, int x2
 	printf("%c", ('a' + x2));
 	printf("%d", (8 - y2));
 }
+
+
 

@@ -1,13 +1,25 @@
 ﻿#include "main.h"
 #include "util.h"
 #include "chess.h"
+
+#define addressA "C:\\Users\\82107\\Desktop\\chessmemo\\A.txt"
+#define addressB "C:\\Users\\82107\\Desktop\\chessmemo\\B.txt"
+#define addressC "C:\\Users\\82107\\Desktop\\chessmemo\\C.txt"
+#define addressD "C:\\Users\\82107\\Desktop\\chessmemo\\D.txt"
+
+
 //#include <tchar.h>
 //#include <locale.h>
 
 
 int main() {
 	int menuCode;
+	int GiboCode;
 	init();
+
+	char Gibo[100][7] = { 0 };				// 기보 저장할 곳
+	char savewhere;					// A, B, C, D
+	int whatturn = 0;
 
 	//printf("\u2654");
 	//_wsetlocale(LC_ALL, L"Korea");
@@ -18,12 +30,19 @@ int main() {
 		setColor(white, black);
 		titleDraw();
 		menuCode = menuDraw();
+
+		char replay_giboA[100][7] = { 0 };
+		char replay_giboB[100][7] = { 0 };
+		char replay_giboC[100][7] = { 0 };
+		char replay_giboD[100][7] = { 0 };
+		getGibofrom_txt(replay_giboA, replay_giboB, replay_giboC, replay_giboD);
+
 		switch (menuCode)
 		{
 		case 0:
 		{
 			int win;
-			win = startGame();
+			win = startGame(Gibo, &whatturn);
 			gotoxy(0, 15);
 			if (win == 1)
 			{
@@ -33,13 +52,278 @@ int main() {
 			{
 				printf("Black Team Win!!");
 			}
+
+			scanf("%c", &savewhere);													// 기보 저장 관련 내용, 저장할 위치정보 받은 후 저장
+
+																										// (****) 미리 텍스트파일 속 정보 가져오기 (****)
+
+			push_Gibo(Gibo, savewhere, whatturn, replay_giboA, replay_giboB, replay_giboC, replay_giboD);
 			return 0;			//게임시작
 
 		}			case 1: infoDraw(); break; //게임 정보
-		case 2: return 0; //종료
+		case 2: GiboCode = GiboDraw();
+			switch (GiboCode)
+			{
+			case 1:
+				txtf_to_chessboard(replay_giboA, &whatturn);
+				return;
+			case 2:
+				return;
+			case 3:
+				return;
+			case 4:
+			}
+		case 3: return 0; //종료
 		}
 		system("cls");
 	}
 
 	return 0;
 }
+
+/*게임이 끝난 후 기보 저장하는 함수*/
+void push_Gibo(char (*Gibo)[7], char savewhere, int whatturn, char(*replay_GiboA)[7], char(*replay_GiboB)[7], char(*replay_GiboC)[7], char(*replay_GiboD)[7])
+{
+	FILE* giboA = fopen(addressA, "wt");
+	FILE* giboB = fopen(addressB, "wt");
+	FILE* giboC = fopen(addressC, "wt");
+	FILE* giboD = fopen(addressD, "wt");
+	
+	if(savewhere != 'A')
+	for (int i = 0; i < 100; i++)
+	{
+		if (replay_GiboA[i][0] == -1)
+			break;
+		for (int j = 0; j < 7; j++)
+		{
+			fputc((replay_GiboA[i][j]), giboA);
+		}
+		//fputc('\n', giboA);
+	}
+
+	if (savewhere != 'B')
+	for (int i = 0; i < 100; i++)
+	{
+		if (replay_GiboB[i][0] == -1)
+			break;
+		for (int j = 0; j < 7; j++)
+		{
+			fputc((replay_GiboB[i][j]), giboB);
+		}
+		//fputc('\n', giboB);
+	}
+
+	if (savewhere != 'C')
+	for (int i = 0; i < 100; i++)
+	{
+		if (replay_GiboC[i][0] == -1)
+			break;
+		for (int j = 0; j < 7; j++)
+		{
+			fputc((replay_GiboC[i][j]), giboC);
+		}
+		//fputc('\n', giboC);
+	}
+
+	if (savewhere != 'D')
+	for (int i = 0; i < 100; i++)
+	{
+		if (replay_GiboD[i][0] == -1)
+			break;
+		for (int j = 0; j < 7; j++)
+		{
+			fputc((replay_GiboD[i][j]), giboD);
+		}
+		//fputc('\n', giboD);
+	}
+
+	switch (savewhere)
+	{
+	case 'A':
+
+		for (int i = 0; i < (whatturn+1); i++)
+		{
+			for (int j = 0; j < 7; j++)
+			{
+				fputc((Gibo[i][j]), giboA);
+			}
+			fputc('\n', giboA);
+		}
+
+		break;
+	case 'B':
+
+		for (int i = 0; i < (whatturn+1); i++)
+		{
+			for (int j = 0; j < 7; j++)
+			{
+				fputc((Gibo[i][j]), giboB);
+			}
+			fputc('\n', giboB);
+		}
+
+		break;
+	case 'C':
+
+		for (int i = 0; i < (whatturn+1); i++)
+		{
+			for (int j = 0; j < 7; j++)
+			{
+				fputc((Gibo[i][j]), giboC);
+			}
+			fputc('\n', giboC);
+		}
+
+		break;
+	case 'D':
+
+		for (int i = 0; i < (whatturn+1); i++)
+		{
+			for (int j = 0; j < 7; j++)
+			{
+				fputc((Gibo[i][j]), giboD);
+			}
+			fputc('\n', giboD);
+		}
+		break;
+	}
+
+	fclose(giboA);
+	fclose(giboB);
+	fclose(giboC);
+	fclose(giboD);
+
+	return;
+}
+
+
+/*A,B,C,D에 있던 기보를 가져오는 함수*/
+void getGibofrom_txt(char(*replay_GiboA)[7], char(*replay_GiboB)[7], char(*replay_GiboC)[7], char(*replay_GiboD)[7])
+{
+
+	FILE* gibo_codeA = fopen(addressA, "rt");
+
+
+	for (int i = 0; i < 100; i++)
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			if (replay_GiboA[i][j] == -1)
+				break;
+			replay_GiboA[i][j] = fgetc(gibo_codeA);
+		}
+		if (replay_GiboA[i][0] == -1)
+			break;
+
+	}
+
+	fclose(gibo_codeA);
+
+	FILE* gibo_codeB = fopen(addressB, "rt");
+
+
+	for (int i = 0; i < 100; i++)
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			if (replay_GiboB[i][j] == -1)
+				break;
+			replay_GiboB[i][j] = fgetc(gibo_codeB);
+		}
+		if (replay_GiboB[i][0] == -1)
+			break;
+	}
+
+	fclose(gibo_codeB);
+
+	FILE* gibo_codeC = fopen(addressC, "rt");
+
+	for (int i = 0; i < 100; i++)
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			if (replay_GiboC[i][j] == -1)
+				break;
+			replay_GiboC[i][j] = fgetc(gibo_codeC);
+		}
+		if (replay_GiboC[i][0] == -1)
+			break;
+	}
+
+	fclose(gibo_codeC);
+
+	FILE* gibo_codeD = fopen(addressD, "rt");
+
+
+	for (int i = 0; i < 100; i++)
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			if (replay_GiboD[i][j] == -1)
+				break;
+			replay_GiboD[i][j] = fgetc(gibo_codeD);
+
+		}
+		if (replay_GiboD[i][0] == -1)
+			break;
+	}
+
+	fclose(gibo_codeD);
+
+	return;
+}
+
+
+int txtf_to_chessboard(char* got_Gibo[7], int* whatturn,)
+{
+	char x1 = (got_Gibo[*whatturn][2] - '0');
+	char y1 = (got_Gibo[*whatturn][3] - '0');
+	char x2 = (got_Gibo[*whatturn][4] - '0');
+	char y2 = (got_Gibo[*whatturn][5] - '0');
+	char changed = got_Gibo[*whatturn][6];
+	board[y2][x2] = { board[y1][x1].name, {y2,x2}, turn, 0, 0 };
+	board[y1][x1] = { '-', {y1,x1},0,0,0 };
+	switch (got_Gibo[*whatturn][0])
+	{
+		// 프로모션
+	case 'B':
+		board[y2][x2] = { changed, {y2,x2}, turn, 0, 0 };
+		break;
+		// 
+	case 'C':
+		char x1 = (got_Gibo[*whatturn][7] - '0');
+		char y1 = (got_Gibo[*whatturn][8] - '0');
+		char x2 = (got_Gibo[*whatturn][9] - '0');
+		char y2 = (got_Gibo[*whatturn][10] - '0');
+		board[y2][x2] = { board[y1][x1].name, {y2,x2}, turn, 0, 0 };
+		board[y1][x1] = { '-', {y1,x1},0,0,0 };
+		break;
+	}
+	if (got_Gibo[*whatturn][0] == 'P')
+	{
+		if (((y2 - y1) == 2) || ((y2 - y1) == -2))							// 두칸을 이동(전진)하였다면
+		{
+			board[y1 + ((y2 - y1) / 2)][x1].en_passant = turn;				// 후방 한칸쪽에 앙파상값 설정.
+		}
+
+		if (board[y2][x2].en_passant != 0)									// 앙파상이었다면
+		{
+			board[y1][x2] = { '-', {y1, x2}, 0,0,0 };						// 앙파상에 당한(?) 말 제거
+		}
+	}
+	if (got_Gibo[*whatturn][0] == 'K')
+	{
+		if ((x2 - x1) == 2)													// 킹이 오른쪽으로 두칸 이동하였다면
+		{																	// -> 캐슬링
+			board[y1][7] = { '-', {y1,7},0,0,0 };							// 처음 룩 위치 지우고
+			board[y1][5] = { 'R', {y1,5},turn, 0,0 };						// 이동될 위치에 룩 두기
+		}
+		else if ((x2 - x1) == -2)											// 킹이 왼쪽으로 두칸 이동하였다면
+		{																	// -> 마찬가지로 캐슬링
+			board[y1][0] = { '-', {y1,0},0,0,0 };							// 처음 룩 위치 지우고
+			board[y1][3] = { 'R', {y1,3},turn, 0,0 };						// 이동될 위치에 룩 두기
+		}
+	}
+}
+
+

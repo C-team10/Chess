@@ -18,7 +18,9 @@ int menuDraw() {
 	gotoxy(x, y + 1);
 	printf("게임 방법");
 	gotoxy(x, y + 2);
-	printf("  종 료  ");
+	printf("기보 복기");
+	gotoxy(x, y + 3);
+	printf("  종료   ");
 	while (1) {
 		int n = keyControl();
 		switch (n) {
@@ -31,7 +33,7 @@ int menuDraw() {
 			};
 			break;
 		case DOWN:
-			if (y < 14) {
+			if (y < 15) {
 				gotoxy(x - 2, y);
 				printf(" ");
 				gotoxy(x - 2, ++y);
@@ -44,6 +46,50 @@ int menuDraw() {
 	}
 	return 1;
 }
+
+
+
+int GiboDraw() {
+	int x = 22, y = 12;
+	gotoxy(x - 2, y);
+	printf("> A");
+	gotoxy(x, y + 1);
+	printf("B");
+	gotoxy(x, y + 2);
+	printf("C");
+	gotoxy(x, y + 3);
+	printf("D");
+	while (1) {
+		int n = keyControl();
+		switch (n) {
+		case UP:
+			if (y > 12) {
+				gotoxy(x - 2, y);
+				printf(" ");
+				gotoxy(x - 2, --y);
+				printf(">");
+			};
+			break;
+		case DOWN:
+			if (y < 15) {
+				gotoxy(x - 2, y);
+				printf(" ");
+				gotoxy(x - 2, ++y);
+				printf(">");
+			};
+			break;
+		case SUBMIT:
+			return y - 12;
+		}
+	}
+	return 1;
+}
+
+
+
+
+
+
 
 
 void infoDraw() {
@@ -108,9 +154,9 @@ void userPos(int* x, int* y, Piece(*board)[8], int direction, int color)
 
 
 
-int startGame()
+int startGame(char (*Gibo)[7], int* get_whatturn)
 {
-	char Gibo[100][7] = { 0 };
+
 
 	system("cls");
 	int turn = 1, key;
@@ -195,15 +241,34 @@ int startGame()
 		en_passant_reset(board, turn);
 
 		if (win == 1)
+		{
+			*get_whatturn = whatturn;
 			return 1;
+		}
 		else if (win == -1)
+		{
+			*get_whatturn = whatturn;
 			return -1;
-
+		}
 		switchTurn(&x, &y, &turn); //turn 전환
 		++whatturn;
 		setColor(white, black);
 	}
 }
+
+
+int return_Game()
+{
+
+	return whatturn;
+}
+
+
+
+
+
+
+
 
 
 void switchTurn(int* x, int* y, int* turn)

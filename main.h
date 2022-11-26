@@ -1,4 +1,5 @@
 #pragma once
+#define _CRT_SECURE_NO_WARNINGS
 #ifndef __STDIO_H__
 #define __STDIO_H__
 
