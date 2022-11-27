@@ -1,3 +1,4 @@
 C:\dev\chess\x64\Debug\chess.exe
 C:\Dev\Chess_Game\x64\Debug\chess.exe
 C:\Users\82107\Desktop\aggainchess\Chess\x64\Debug\chess.exe
+C:\Users\82107\Desktop\restartchess\Chess\x64\Debug\chess.exe

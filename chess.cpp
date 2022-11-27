@@ -50,11 +50,7 @@ int menuDraw() {
 
 
 int GiboDraw() {
-<<<<<<< HEAD
 	int x = 42, y = 12;
-=======
-	int x = 22, y = 12;
->>>>>>> origin/rrestart
 	gotoxy(x - 2, y);
 	printf("> A");
 	gotoxy(x, y + 1);
@@ -158,7 +154,7 @@ void userPos(int* x, int* y, Piece(*board)[8], int direction, int color)
 
 
 
-int startGame(char (*Gibo)[7], int* get_whatturn)
+int startGame(char(*Gibo)[7], int* get_whatturn)
 {
 
 
@@ -261,14 +257,6 @@ int startGame(char (*Gibo)[7], int* get_whatturn)
 }
 
 
-<<<<<<< HEAD
-=======
-int return_Game()
-{
-
-	return whatturn;
-}
->>>>>>> origin/rrestart
 
 
 
@@ -291,7 +279,7 @@ void switchTurn(int* x, int* y, int* turn)
 	gotoxy(*x, *y); //위치 복구
 }
 
-void promotion(Piece(*board)[8], Piece catchPiece2, char (*Gibo)[7], int whatturn)
+char promotion(Piece(*board)[8], Piece catchPiece2, char(*Gibo)[7], int whatturn)
 {
 	int y_pos = catchPiece2.pos[0];
 	int x_pos = catchPiece2.pos[1];
@@ -346,12 +334,117 @@ void promotion(Piece(*board)[8], Piece catchPiece2, char (*Gibo)[7], int whattur
 				setColor(white, black);
 				printf(" ");
 			}
-			return;
+			return promote_option[x];
 		}
 	}
 
 }
 
 void writeNotation(int x, int y) {
+
+}
+
+
+int restartGame(char(*Gibo)[7], int* get_whatturn, Piece (*board1)[8])
+{
 	
+
+	setColor(white, black);
+	system("cls");
+	int turn = 1, key;
+	int whatturn = *get_whatturn;						//몇번째 턴인지
+	if (whatturn % 2 == 1)
+		turn = -1;
+	int x = 0, y = 0;
+
+	Piece catchPiece;
+
+	boardDraw(board1); //board 출력
+
+	//gotoxy(0, 10);
+	//printf("Turn of White");	// 초기 시작자의 색 표시.(이후에 턴 바뀌면서 알아서 사라짐)
+	switchTurn(&x, &y, &turn);
+
+	userPos(&x, &y, board1, -1, white); //초기 userpos(0,0)
+
+	while (1)
+	{
+		int win = 0;
+		int success = 0;
+		//setColor(black, lightgray);
+		key = keyControl();
+		switch (key)
+		{
+		case UP:
+			if (y > 0)
+			{
+				userPos(&x, &y, board1, UP, white);
+			}
+			break;
+		case DOWN:
+			if (y < 7)
+			{
+				userPos(&x, &y, board1, DOWN, white);
+			}break;
+		case LEFT:
+			if (x > 0)
+			{
+				userPos(&x, &y, board1, LEFT, white);
+			}
+			break;
+		case RIGHT:
+			if (x < 7)
+			{
+				userPos(&x, &y, board1, RIGHT, white);
+			}
+			break;
+		case SUBMIT:
+			catchPiece = board1[y][x];
+			if (turn == catchPiece.exist) //player에 맞는 색상의 기물 선택
+			{
+				switch (catchPiece.name)
+				{
+				case 'R':
+					success = Rook_move(board1, &catchPiece, turn, 'R', &win, whatturn, Gibo);
+					break;
+				case 'B':
+					success = Bishop_move(board1, &catchPiece, turn, 'B', &win, whatturn, Gibo);
+					break;
+				case 'N':
+					success = Knight_move(board1, &catchPiece, turn, &win, whatturn, Gibo);
+					break;
+				case 'P':
+					success = Pawn_move(board1, &catchPiece, turn, &win, whatturn, Gibo);
+					break;
+				case 'Q':
+					success = Queen_move(board1, &catchPiece, turn, 'Q', &win, whatturn, Gibo);
+					break;
+				case 'K':
+					success = King_move(board1, &catchPiece, turn, &win, whatturn, Gibo);
+					break;
+				}
+				setColor(white, black);
+				break;
+			}
+			else continue;				//player에 맞는 색상의 기물 선택 못할경우 다시 처음으로 돌아가기
+		}
+		if (success != 1)			//기물 움직임 구현에 성공하지 못할경우 다시 처음으로 돌아가기
+			continue;
+
+		en_passant_reset(board1, turn);
+
+		if (win == 1)
+		{
+			*get_whatturn = whatturn;
+			return 1;
+		}
+		else if (win == -1)
+		{
+			*get_whatturn = whatturn;
+			return -1;
+		}
+		switchTurn(&x, &y, &turn); //turn 전환
+		++whatturn;
+		setColor(white, black);
+	}
 }

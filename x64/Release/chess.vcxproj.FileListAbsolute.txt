@@ -2,3 +2,4 @@ C:\dev\chess\x64\Release\chess.exe
 C:\Dev\Chess_Game\x64\Release\chess.exe
 C:\Users\82107\Desktop\aggainchess\Chess\x64\Release\chess.exe
 C:\Dev\chess-h\x64\Release\chess.exe
+C:\Users\82107\Desktop\restartchess\Chess\x64\Release\chess.exe

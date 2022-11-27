@@ -1,10 +1,10 @@
 #include "piece.h"
 
-Piece (*pieceInit())[8]
+Piece(*pieceInit())[8]
 {
 	Piece pieces[8][8];
 	Piece piece;
-	int i,j ;
+	int i,j;
 	for (i = 0; i < 8; i++)
 		for (j = 0; j < 8; j++) {
 			pieces[i][j].name = '-';
@@ -12,7 +12,7 @@ Piece (*pieceInit())[8]
 		}
 
 	//Rook
-	piece.name = 'R'; 
+	piece.name = 'R';
 	piece.exist = -1; //흑
 	piece.castling = 1;
 	pieces[0][0] = piece; pieces[0][7] = piece;
@@ -20,21 +20,21 @@ Piece (*pieceInit())[8]
 	pieces[7][0] = piece; pieces[7][7] = piece;
 
 	//Knight
-	piece.name = 'N'; 
+	piece.name = 'N';
 	piece.exist = -1;
 	pieces[0][1] = piece; pieces[0][6] = piece;
 	piece.exist = 1;
 	pieces[7][1] = piece; pieces[7][6] = piece;
 
 	//Bishop
-	piece.name = 'B'; 
+	piece.name = 'B';
 	piece.exist = -1;
 	pieces[0][2] = piece; pieces[0][5] = piece;
 	piece.exist = 1;
 	pieces[7][2] = piece; pieces[7][5] = piece;
 
 	//Queen
-	piece.name = 'Q'; 
+	piece.name = 'Q';
 	piece.exist = -1;
 	pieces[0][3] = piece;
 	piece.exist = 1;
@@ -48,7 +48,7 @@ Piece (*pieceInit())[8]
 	piece.exist = 1;
 	pieces[7][4] = piece;
 
-	
+
 	//Pawn
 	piece.name = 'P';
 	piece.exist = -1;
@@ -58,11 +58,11 @@ Piece (*pieceInit())[8]
 	piece.exist = 1;
 	for (i = 0; i < 8; i++)
 		pieces[6][i] = piece;
-	
+
 	//position
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
-			if(pieces[i][j].name )
+			if (pieces[i][j].name)
 			pieces[i][j].pos[0] = i;
 			pieces[i][j].pos[1] = j;
 		}
@@ -79,7 +79,7 @@ void SetPieceColor(Piece piece)
 		forground = white;
 	else //if (piece.exist == -1) //흑
 		forground = black;
-	if((x+y)%2 == 0)
+	if ((x + y) % 2 == 0)
 		setColor(forground, green);
 	else setColor(forground, brown);
 }
@@ -386,7 +386,7 @@ void recurse_Bishop(Piece(*board)[8], Piece catchPiece, Piece* searching_Piece, 
 }
 
 
-int Knight_move(Piece(*board)[8], Piece* catchPiece, int turn, int* win,int whatturn, char(*Gibo)[7])
+int Knight_move(Piece(*board)[8], Piece* catchPiece, int turn, int* win, int whatturn, char(*Gibo)[7])
 {
 	gotoxy(3, 3);
 	printf("%d,%d", catchPiece->pos[0], catchPiece->pos[1]);
@@ -747,7 +747,7 @@ int King_move(Piece(*board)[8], Piece* catchPiece, int turn, int* win, int whatt
 
 }
 
-int Pawn_move(Piece(*board)[8], Piece* catchPiece, int turn, int* win, int whatturn, char (*Gibo)[7])
+int Pawn_move(Piece(*board)[8], Piece* catchPiece, int turn, int* win, int whatturn, char(*Gibo)[7])
 {
 	gotoxy(3, 3);
 	printf("%d,%d", catchPiece->pos[0], catchPiece->pos[1]);
@@ -814,8 +814,10 @@ int Pawn_move(Piece(*board)[8], Piece* catchPiece, int turn, int* win, int whatt
 						printGibofor_console(whatturn, 'P', x1, y1, x2, y2, ' ');
 
 						if (catchPiece2.pos[0] == 0)											// 프로모션
+						{
 							promotion(board, catchPiece2, Gibo, whatturn);
-
+							Gibo[whatturn][0] = 'B';
+						}
 						return 1;
 					}
 					else return 0;
@@ -865,7 +867,10 @@ int Pawn_move(Piece(*board)[8], Piece* catchPiece, int turn, int* win, int whatt
 						printGibofor_console(whatturn, 'P', x1, y1, x2, y2, ' ');
 
 						if (catchPiece2.pos[0] == 0)											// 프로모션
+						{
 							promotion(board, catchPiece2, Gibo, whatturn);
+							Gibo[whatturn][0] = 'B';
+						}
 						return 1;
 					}
 
@@ -888,8 +893,10 @@ int Pawn_move(Piece(*board)[8], Piece* catchPiece, int turn, int* win, int whatt
 						if (whatname == 'K')
 							*win = turn;
 						else if (catchPiece2.pos[0] == 0)										// 프로모션
+						{
 							promotion(board, catchPiece2, Gibo, whatturn);
-
+							Gibo[whatturn][0] = 'B';
+						}
 						return 1;
 					}
 					else return 0;
@@ -916,8 +923,10 @@ int Pawn_move(Piece(*board)[8], Piece* catchPiece, int turn, int* win, int whatt
 						printGibofor_console(whatturn, 'P', x1, y1, x2, y2, ' ');
 
 						if (catchPiece2.pos[0] == 7)											//프로모션
+						{
 							promotion(board, catchPiece2, Gibo, whatturn);
-
+							Gibo[whatturn][0] = 'B';
+						}
 						return 1;
 					}
 					else return 0;
@@ -984,7 +993,10 @@ int Pawn_move(Piece(*board)[8], Piece* catchPiece, int turn, int* win, int whatt
 						if (whatname == 'K')
 							*win = turn;
 						else if (catchPiece2.pos[0] == 7)													//프로모션
+						{
 							promotion(board, catchPiece2, Gibo, whatturn);
+							Gibo[whatturn][0] = 'B';
+						}
 						return 1;
 					}
 				}
@@ -999,14 +1011,14 @@ int Pawn_move(Piece(*board)[8], Piece* catchPiece, int turn, int* win, int whatt
 
 
 
-void printGibofor_txtf(char (*Gibo)[7], int whatturn, char type, char moved_thing, int x1, int y1, int x2, int y2, char changed)
+void printGibofor_txtf(char(*Gibo)[7], int whatturn, char type, char moved_thing, int x1, int y1, int x2, int y2, char changed)
 {
 	Gibo[whatturn][0] = type;
 	Gibo[whatturn][1] = moved_thing;
-	Gibo[whatturn][2] = (x1+'0');
-	Gibo[whatturn][3] = (y1+'0');
-	Gibo[whatturn][4] = (x2+'0');
-	Gibo[whatturn][5] = (y2+'0');
+	Gibo[whatturn][2] = (x1 + '0');
+	Gibo[whatturn][3] = (y1 + '0');
+	Gibo[whatturn][4] = (x2 + '0');
+	Gibo[whatturn][5] = (y2 + '0');
 	Gibo[whatturn][6] = changed;
 }
 
