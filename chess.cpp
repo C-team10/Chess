@@ -50,7 +50,11 @@ int menuDraw() {
 
 
 int GiboDraw() {
+<<<<<<< HEAD
 	int x = 42, y = 12;
+=======
+	int x = 22, y = 12;
+>>>>>>> origin/rrestart
 	gotoxy(x - 2, y);
 	printf("> A");
 	gotoxy(x, y + 1);
@@ -257,6 +261,14 @@ int startGame(char (*Gibo)[7], int* get_whatturn)
 }
 
 
+<<<<<<< HEAD
+=======
+int return_Game()
+{
+
+	return whatturn;
+}
+>>>>>>> origin/rrestart
 
 
 

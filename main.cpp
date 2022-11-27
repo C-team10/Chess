@@ -280,6 +280,7 @@ void getGibofrom_txt(char(*replay_GiboA)[7], char(*replay_GiboB)[7], char(*repla
 }
 
 
+
 int txtf_to_chessboard(char (*got_Gibo)[7], int* whatturn)
 {
 	system("cls");
@@ -343,6 +344,7 @@ int txtf_to_chessboard(char (*got_Gibo)[7], int* whatturn)
 		{
 			board[y1 + ((y2 - y1) / 2)][x1].en_passant = turn;				// 후방 한칸쪽에 앙파상값 설정.
 
+
 		}
 
 		if (board[y2][x2].en_passant != 0)									// 앙파상이었다면					// 여기 해결 안됨.
@@ -356,11 +358,13 @@ int txtf_to_chessboard(char (*got_Gibo)[7], int* whatturn)
 		}
 	}
 	if (got_Gibo[*whatturn][1] == 'K')
+
 	{
 		if ((x2 - x1) == 2)													// 킹이 오른쪽으로 두칸 이동하였다면
 		{																	// -> 캐슬링
 			board[y1][7] = { '-', {y1,7},0,0,0 };							// 처음 룩 위치 지우고
 			board[y1][5] = { 'R', {y1,5},turn, 0,0 };						// 이동될 위치에 룩 두기
+
 			gotoxy(7, y1);
 			if ((7 + y1) % 2 == 0) setColor(black, green); //set background color 
 			else setColor(black, brown);
@@ -369,11 +373,13 @@ int txtf_to_chessboard(char (*got_Gibo)[7], int* whatturn)
 			if ((5 + y1) % 2 == 0) setColor(color, green); //set background color 
 			else setColor(color, brown);
 			printf("%c", board[y1][5].name);
+
 		}
 		else if ((x2 - x1) == -2)											// 킹이 왼쪽으로 두칸 이동하였다면
 		{																	// -> 마찬가지로 캐슬링
 			board[y1][0] = { '-', {y1,0},0,0,0 };							// 처음 룩 위치 지우고
 			board[y1][3] = { 'R', {y1,3},turn, 0,0 };						// 이동될 위치에 룩 두기
+
 			gotoxy(0, y1);
 			if ((0 + y1) % 2 == 0) setColor(black, green); //set background color 
 			else setColor(black, brown);
